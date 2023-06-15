@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     });
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: newUser._id }, 'your_secret_key');
+    const token = jwt.sign({ userId: newUser._id }, process.env.SECRET_KEY);
 
     // Set the token as an HTTP-only cookie
     res.cookie('token', token, {
@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, SECRET_KEY);
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
 
     // Set the token as an HTTP-only cookie
     res.cookie('token', token, {

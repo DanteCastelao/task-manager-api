@@ -1,6 +1,6 @@
-const Task = require('../models/task');
-const io = require('socket.io')(); // Import the Socket.io instance
+const io = require('socket.io')();
 const { validationResult } = require('express-validator');
+const Task = require('../models/task');
 
 // Create a task
 exports.createTask = async (req, res) => {

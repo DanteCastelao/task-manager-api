@@ -1,5 +1,7 @@
 const request = require('supertest');
 const app = require('../server');
+const { default: mongoose } = require('mongoose');
+const server = require('../server');
 
 describe('API Tests', () => {
   let authToken;
@@ -19,7 +21,7 @@ describe('API Tests', () => {
 
     // Save the JWT token for subsequent requests
     authToken = response.body.token;
-  });
+  }, 20000);
 
   it('should login a user', async () => {
     const response = await request(app)
@@ -34,7 +36,7 @@ describe('API Tests', () => {
 
     // Save the JWT token for subsequent requests
     authToken = response.body.token;
-  });
+  }, 20000);
 
   it('should create a new task', async () => {
     const response = await request(app)
@@ -53,7 +55,7 @@ describe('API Tests', () => {
 
     // Save the task ID for subsequent requests
     taskId = response.body._id;
-  });
+  }, 20000);
 
   it('should update an existing task', async () => {
     const response = await request(app)
@@ -75,4 +77,9 @@ describe('API Tests', () => {
     expect(response.body.status).toBe('In Progress');
   });
 
+}, 20000);
+
+afterAll(async () => {
+  await mongoose.connection.close();
+  server.close();
 });
