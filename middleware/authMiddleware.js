@@ -5,7 +5,7 @@ const User = require('../models/user');
 exports.authMiddleware = async (req, res, next) => {
   try {
     // Get the token from the request cookies
-    const token = req.cookies.token;
+    const token = req.headers.authorization;
 
     // Check if the token exists
     if (!token) {
@@ -13,7 +13,7 @@ exports.authMiddleware = async (req, res, next) => {
     }
 
     // Verify the token
-    const decoded = jwt.verify(token, 'your_secret_key');
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
     // Find the user associated with the token
     const user = await User.findById(decoded.userId);

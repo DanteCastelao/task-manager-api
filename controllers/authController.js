@@ -27,15 +27,8 @@ exports.register = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser._id }, process.env.SECRET_KEY);
 
-    // Set the token as an HTTP-only cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-      sameSite: 'strict', // Adjust according to your requirements
-    });
-
     // Return the user data
-    res.status(201).json({ user: newUser });
+    res.status(201).json({ user: newUser, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -62,15 +55,8 @@ exports.login = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
 
-    // Set the token as an HTTP-only cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-      sameSite: 'strict', // Adjust according to your requirements
-    });
-
     // Return the user data
-    res.status(200).json({ user });
+    res.status(200).json({ user, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

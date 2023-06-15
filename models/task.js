@@ -30,12 +30,7 @@ const taskSchema = new mongoose.Schema({
       type: String,
       enum: ['Todo', 'In Progress', 'Completed'],
       default: 'Todo',
-    },
-    tags: [
-      {
-        type: String,
-      },
-    ]
+    }
 });
 
 const Task = mongoose.model('Task', taskSchema);

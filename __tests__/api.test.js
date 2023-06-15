@@ -1,7 +1,12 @@
 const request = require('supertest');
 const app = require('../server');
-const { default: mongoose } = require('mongoose');
 const server = require('../server');
+const mongoose = require('mongoose');
+
+beforeAll(async () => {
+  // Database setup before running the tests
+  await mongoose.connection.dropDatabase();
+});
 
 describe('API Tests', () => {
   let authToken;
@@ -41,13 +46,15 @@ describe('API Tests', () => {
   it('should create a new task', async () => {
     const response = await request(app)
       .post('/tasks')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `${authToken}`)
       .send({
         title: 'Task 1',
         description: 'Description for Task 1',
         dueDate: '2023-06-30',
         priority: 'Medium',
+        status: 'Todo',
       });
+      console.log('Request Headers:', response.req._headers.authorization);
 
     expect(response.status).toBe(201);
     expect(response.body.title).toBe('Task 1');
@@ -60,7 +67,7 @@ describe('API Tests', () => {
   it('should update an existing task', async () => {
     const response = await request(app)
       .put(`/tasks/${taskId}`)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `${authToken}`)
       .send({
         title: 'Updated Task',
         description: 'Updated description',
@@ -72,7 +79,8 @@ describe('API Tests', () => {
     expect(response.status).toBe(200);
     expect(response.body.title).toBe('Updated Task');
     expect(response.body.description).toBe('Updated description');
-    expect(response.body.dueDate).toBe('2023-07-15');
+    const receivedDueDate = new Date(response.body.dueDate).toISOString().split('T')[0];
+    expect(receivedDueDate).toBe('2023-07-15');
     expect(response.body.priority).toBe('High');
     expect(response.body.status).toBe('In Progress');
   });
