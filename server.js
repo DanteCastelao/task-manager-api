@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const http = require('http');
@@ -10,12 +9,12 @@ const { createTask, updateTask, deleteTask } = require('./controllers/taskContro
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 const server = http.createServer(app);
 const io = socketIO(server);
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect("mongodb+srv://dbUser:KV6QK767WuBmrkb4@cluster0.9zrkk6n.mongodb.net/?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
